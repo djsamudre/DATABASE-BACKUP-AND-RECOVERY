@@ -56,3 +56,7 @@ Conclusion
 
 Backup and recovery are vital aspects of database management. Implementing a structured backup strategy ensures minimal data loss and quick recovery in case of failure. Organizations should establish regular backup schedules, use secure storage, and test recovery processes periodically to enhance data protection and business continuity.
 
+*OUTPUT*:
+
+![Image](https://github.com/user-attachments/assets/5dee1ba0-83f9-4501-b780-3beafd3a3364)
+
