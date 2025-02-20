@@ -1,0 +1,98 @@
+**MySQL Backup and Recovery Documentation**
+
+### **Introduction**
+MySQL backup and recovery are essential processes to ensure data protection, disaster recovery, and business continuity. This document provides a detailed guide on how to back up a MySQL database and restore it in case of failure.
+
+### **Purpose**
+The primary objective of this process is to create a backup of the database that can be used to recover data in case of corruption, accidental deletion, or hardware failure. This documentation covers the creation of a database, backup procedures, database restoration, and verification of successful recovery.
+
+---
+
+### **Step 1: Creating a Sample Database and Table**
+The first step is to create a MySQL database and a table to store sample data. This ensures that we have data to back up and restore.
+
+#### **SQL Commands:**
+```sql
+CREATE DATABASE IF NOT EXISTS sample_db;
+USE sample_db;
+
+CREATE TABLE IF NOT EXISTS employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    position VARCHAR(100) NOT NULL,
+    salary DECIMAL(10,2) NOT NULL
+);
+
+INSERT INTO employees (name, position, salary) VALUES
+('Alice', 'Manager', 75000.00),
+('Bob', 'Developer', 60000.00),
+('Charlie', 'Designer', 55000.00);
+```
+This will create a database named `sample_db` and a table `employees` with sample data.
+
+---
+
+### **Step 2: Backing Up the Database**
+A backup ensures that data can be recovered in case of failure. The `mysqldump` utility is used for this purpose.
+
+#### **Backup Command:**
+Run the following command in **Command Prompt (cmd):**
+```
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqldump.exe" -u root -p sample_db > C:\backup\sample_db_backup.sql
+```
+- This command exports the database `sample_db` into a SQL file (`sample_db_backup.sql`).
+- The `-u root -p` prompts for the MySQL root password before executing the backup.
+- The backup file is stored in `C:\backup`.
+
+---
+
+### **Step 3: Simulating Database Failure**
+To verify the effectiveness of the backup and recovery process, we can simulate a database failure by deleting it.
+
+#### **SQL Command:**
+```sql
+DROP DATABASE IF EXISTS sample_db;
+```
+This command removes the database `sample_db`, simulating accidental deletion or corruption.
+
+---
+
+### **Step 4: Restoring the Database**
+After a failure, the database needs to be restored using the backup file.
+
+#### **Restore Commands:**
+1. First, recreate the database:
+```
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p -e "CREATE DATABASE sample_db;"
+```
+2. Restore the database using the backup file:
+```
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p sample_db < C:\backup\sample_db_backup.sql
+```
+- This imports all tables and data back into `sample_db`.
+
+---
+
+### **Step 5: Verifying the Restoration**
+To confirm that the data has been successfully restored, we can query the `employees` table.
+
+#### **Verification Command:**
+Run the following command in **Command Prompt:**
+```
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p -e "SELECT * FROM sample_db.employees;"
+```
+If the restoration is successful, the output should display the original data:
+```
++----+---------+-----------+---------+
+| id | name    | position  | salary  |
++----+---------+-----------+---------+
+| 1  | Alice   | Manager   | 75000.00|
+| 2  | Bob     | Developer | 60000.00|
+| 3  | Charlie | Designer  | 55000.00|
++----+---------+-----------+---------+
+```
+---
+
+### **Conclusion**
+This documentation outlines the **MySQL Backup and Recovery** process in detail. The steps include creating a database, backing up data using `mysqldump`, simulating a failure, restoring from a backup, and verifying the restoration process. Implementing a structured backup strategy ensures data protection and minimizes downtime in case of unexpected failures. Regular backups and recovery testing should be part of every database management plan.
+
